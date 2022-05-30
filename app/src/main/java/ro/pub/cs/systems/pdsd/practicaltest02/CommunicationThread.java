@@ -39,60 +39,26 @@ public class CommunicationThread extends Thread {
                 return;
             }
 
-                Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the webservice...");
-                HttpClient httpClient = new DefaultHttpClient();
+            Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the webservice...");
+            HttpClient httpClient = new DefaultHttpClient();
 
-                Log.d(Constants.TAG, Constants.WEB_SERVICE_ADDRESS + "/" + word);
-                HttpGet httpGet = new HttpGet(Constants.WEB_SERVICE_ADDRESS + "/" + word);
+            Log.d(Constants.TAG, Constants.WEB_SERVICE_ADDRESS + "/" + word);
+            HttpGet httpGet = new HttpGet(Constants.WEB_SERVICE_ADDRESS + "/" + word);
 
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                String pageSource = httpClient.execute(httpGet, responseHandler);
-                if (pageSource == null) {
-                    Log.e(Constants.TAG, "[COMMUNICATION THREAD] Error getting the information from the webservice!");
-                    return;
-                }
-                JSONArray content = new JSONArray(pageSource);
-                Log.d(Constants.TAG, content.toString());
-                JSONObject meanings = content.getJSONObject(0);
-                Log.d(Constants.TAG, meanings.toString());
-                JSONArray meaning = meanings.getJSONArray("meanings");
-                JSONObject tmp = meaning.getJSONObject(0);
-                JSONObject tmp2 = tmp.getJSONArray("definitions").getJSONObject(0);
-
-                String wordData = "";
-
-//                wordData = meaning.toString();
-                wordData = tmp2.toString();
-//                wordData = meanings.getString("meanings");
-//                wordData = definitions.toString();
-//                wordData = meaning.getString("definitions");
-                Log.d(Constants.TAG, "DEBUG + " + wordData);
-
-//
-//                JSONObject main = content.getJSONObject("main");
-//                String temperature = main.getString("temp");
-//                String pressure = main.getString(Constants.PRESSURE);
-//                String humidity = main.getString(Constants.HUMIDITY);
-//
-//                JSONObject wind = content.getJSONObject("wind");
-//                String windSpeed = wind.getString("speed");
-//
-//                weatherForecastInformation = new WeatherForecastInformation();
-//                weatherForecastInformation.setCondition(condition);
-//                weatherForecastInformation.setWind_speed(Double.parseDouble(windSpeed));
-//                weatherForecastInformation.setTemperature(Double.parseDouble(temperature));
-//                weatherForecastInformation.setPressure(Double.parseDouble(pressure));
-//                weatherForecastInformation.setHumidity(Double.parseDouble(humidity));
-//
-//                serverThread.setData(city, weatherForecastInformation);
-
-//            if (weatherForecastInformation == null) {
-//                Log.e(Constants.TAG, "[COMMUNICATION THREAD] Weather Forecast Information is null!");
-//                return;
-//            }
-
-            String result = null;
-            result = wordData;
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String pageSource = httpClient.execute(httpGet, responseHandler);
+            if (pageSource == null) {
+                Log.e(Constants.TAG, "[COMMUNICATION THREAD] Error getting the information from the webservice!");
+                return;
+            }
+            JSONArray content = new JSONArray(pageSource);
+            Log.d(Constants.TAG, content.toString());
+            JSONObject meanings = content.getJSONObject(0);
+            Log.d(Constants.TAG, meanings.toString());
+            JSONArray meaning = meanings.getJSONArray("meanings");
+            JSONObject tmp = meaning.getJSONObject(0);
+            JSONObject tmp2 = tmp.getJSONArray("definitions").getJSONObject(0);
+            String result = tmp2.getString("definition");
 
             PrintWriter printWriter = Utilities.getWriter(socket);
             printWriter.println(result);
